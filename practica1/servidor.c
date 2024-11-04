@@ -33,7 +33,7 @@ int main()
 
     printf("\nSe asignarán los atributos al socket...\n");
 
-    // Se la estructura con la información para recibir peticiones con cualquier
+    // Estructura con la información para recibir peticiones con cualquier
     // dirección IP en el puerto 8000
     struct sockaddr_in addr_serv;
     memset(&addr_serv, sizeof addr_serv, 0);
@@ -77,7 +77,7 @@ int main()
         printf("\nLa petición recibida fue: %s.\n", mensaje);
 
         /* Aqui enviamos los datos al cliente */
-        // Se especifica el socket,
+        // Se especifica el socket, los datos a enviar y el tamaño de bytes
         send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
 
         printf("\nYa envié el mensaje al cliente.\n\n");
