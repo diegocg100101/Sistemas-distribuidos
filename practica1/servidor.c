@@ -10,13 +10,14 @@
 #define ETHSIZE 400
 #define PORT 8000
 #define BUF_SIZE 5
+#define NUM_INSCRIPCIONES 500
 
 int main()
 {
     int posicion = 0;
-    char inscripciones[500][100];   
+    char inscripciones[NUM_INSCRIPCIONES][100];   
     char mensaje[ETHSIZE];
-    char datos_para_el_cliente[] = "it works:)";
+    char datos_para_el_cliente[100];
 
     memset(inscripciones, 0, sizeof(inscripciones));
 
@@ -85,11 +86,15 @@ int main()
         strcpy(inscripciones[posicion], mensaje);
 
         // Depura para mostrar las inscripciones hechas
-        for(int i = 0; i < 500; i++) {
+
+        printf("Inscripciones realizadas:\n");
+        for(int i = 0; i < NUM_INSCRIPCIONES; i++) {
             if(inscripciones[i][0] != '\0'){
                 printf("%s\n", inscripciones[i]);
             }
         }
+
+        sprintf(datos_para_el_cliente, "El número de inscripción es: %d", posicion + 1);
 
         /* Aqui enviamos los datos al cliente */
         // Se especifica el socket, los datos a enviar y el tamaño de bytes
