@@ -13,9 +13,14 @@
 
 int main()
 {
+    int posicion = 0;
+    char inscripciones[500][100];   
     char mensaje[ETHSIZE];
     char datos_para_el_cliente[] = "it works:)";
 
+    memset(inscripciones, 0, sizeof(inscripciones));
+
+    // Datos a recibir
     char nombre[50];
     long int clave;
     char grupo[20];
@@ -76,6 +81,16 @@ int main()
 
         printf("\nLa petición recibida fue: %s.\n", mensaje);
 
+        // Almacena en el arreglo
+        strcpy(inscripciones[posicion], mensaje);
+
+        // Depura para mostrar las inscripciones hechas
+        for(int i = 0; i < 500; i++) {
+            if(inscripciones[i][0] != '\0'){
+                printf("%s\n", inscripciones[i]);
+            }
+        }
+
         /* Aqui enviamos los datos al cliente */
         // Se especifica el socket, los datos a enviar y el tamaño de bytes
         send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
@@ -83,6 +98,8 @@ int main()
         printf("\nYa envié el mensaje al cliente.\n\n");
 
         printf("\nEsperando una conexión de un cliente en el puerto %d...\n", PORT);
+
+        posicion ++;
     }
 
     return 0;
