@@ -64,9 +64,13 @@ int main ()
 
       // Se lee la cadena de texto  obtenida en la petición
       int size_recv = read(newSocket_fd, request, ETHSIZE);
+
+      if(strcmp(request, "estado") == 0){
+         printf("funcionó\n");
+      }
+      
       printf("\nLa petición recibida fue: %s.\n", request);
-   
-      /* Aqui enviamos los datos al cliente */
+      
       // Se especifica el socket,
       send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente)+1, 0);
 

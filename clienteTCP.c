@@ -15,7 +15,7 @@
 
 int main (int argc, char *argv [])
 {
-   char request[] = "Dame el clima para hoy";
+   char request[] = "estado";
    char buffer[BUF_SIZE];
 
    if (argc != 3) {
@@ -52,9 +52,6 @@ int main (int argc, char *argv [])
       printf("\nNo se pudo realizar la conexión remota.\n");
       exit(-1);
    }
-
-   int placas = 77;
-   sprintf(request, "viaje_terminado, %d", placas);
    
    /*
     * Para enviar datos usar send()

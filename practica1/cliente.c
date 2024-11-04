@@ -16,9 +16,9 @@
 int main(int argc, char *argv[])
 {
     // Datos para mandar al servidor
-    char nombre[50] = "Ilse Marilu";
-    long int clave = 4534543;
-    char grupo[20] = "ABCDEFG";
+    char nombre[50] = "Diego";
+    long int clave = 1233343;
+    char grupo[20] = "HIJKLM";
 
     // Variable que almacena el mensaje codificado
     char mensaje[200]; 
