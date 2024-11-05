@@ -7,33 +7,37 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define BUF_SIZE   400
+#define BUF_SIZE 400
 
-/* 
+/*
  *  sintaxis: cliente <direccion IP> <# puerto>
  */
 
-int main (int argc, char *argv [])
+int main(int argc, char *argv[])
 {
-   char request[] = "estado";
+   char request[20];
+
+   printf("Escribe la petición: \n");
+   scanf("%s", request);
+
    char buffer[BUF_SIZE];
 
-   if (argc != 3) {
-      puts ("\nModo de uso: ./clienteClima <direccion IP> <# puerto>");
+   if (argc != 3)
+   {
+      puts("\nModo de uso: ./clienteClima <direccion IP> <# puerto>");
       exit(-1);
-   } 
+   }
 
    printf("\nAbriendo el socket...\n");
    int fd = socket(AF_INET, SOCK_STREAM, 0);
    if (fd == -1)
       perror("\nError, no se pudo abrir el socket.\n\n");
-   else 
+   else
       perror("\nSocket abierto.\n");
-
 
    printf("\nAsignando atributos al socket...\n");
    struct sockaddr_in serv;
-   memset (&serv, sizeof serv, 0);
+   memset(&serv, sizeof serv, 0);
    serv.sin_family = AF_INET;
    /* inet_addr convierte de cadena de caracteres (formato puntado
     * "128.112.123.1") a
@@ -41,32 +45,29 @@ int main (int argc, char *argv [])
     */
    serv.sin_addr.s_addr = inet_addr(argv[1]);
 
-  /* htons convierte un entero largo en octetos cuyo orden entienden
-   * las funciones de los sockets
-   */
+   /* htons convierte un entero largo en octetos cuyo orden entienden
+    * las funciones de los sockets
+    */
    serv.sin_port = htons(atoi(argv[2]));
 
-
-   if (connect(fd, (struct sockaddr *) &serv, sizeof serv) < 0)
+   if (connect(fd, (struct sockaddr *)&serv, sizeof serv) < 0)
    {
       printf("\nNo se pudo realizar la conexión remota.\n");
       exit(-1);
    }
-   
+
    /*
     * Para enviar datos usar send()
-    */ 
-   send(fd, request, strlen(request), 0);
-
+    */
+   send(fd, request, strlen(request) + 1, 0);
 
    printf("\nLa petición fue enviada al servidor.\n\n");
 
-  /* para recibir datos usar recvfrom */
-  read(fd, buffer, BUF_SIZE);
+   /* para recibir datos usar recvfrom */
+   read(fd, buffer, BUF_SIZE);
 
-  printf("\nEstos son los datos enviados por el servidor:\n");
-  printf("'%s'.\n\n", buffer); 
-  
-  return 0;
+   printf("\nEstos son los datos enviados por el servidor:\n");
+   printf("'%s'.\n\n", buffer);
+
+   return 0;
 }
-

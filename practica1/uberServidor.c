@@ -9,15 +9,17 @@
 #include <stdbool.h>
 
 #define ETHSIZE 400
-#define PORT 8000
+#define PORT 5050
 #define BUF_SIZE 5
-#define NUM_AUTOS 500
+#define NUM_AUTOS 10
 
 int main()
 {
     char request[ETHSIZE];
     char datos_para_el_cliente[ETHSIZE];
     bool autos[NUM_AUTOS];
+
+    memset(autos, true, sizeof(autos));
 
     // Se crea el socket con protocolo TCP
     printf("\nSe creará el socket...\n");
@@ -77,17 +79,29 @@ int main()
             strcpy(datos_para_el_cliente, "funcionó");
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
-        else if (strcmp(request, "viaje"))
+        else if (strcmp(request, "viaje") == 0)
         {
             printf("Viaje\n");
+            for(int i = 0; i < NUM_AUTOS; i++){
+                if(autos[i] == true) {
+                    printf("Está disponible\n");
+                    sprintf(datos_para_el_cliente, "Placas: %d, Costo: %d", i, 2);
+                    send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
+                    autos[i] == false;
+                }
+            }
         }
-        else if (strcmp(request, "viaje_terminado"))
+        else if (strcmp(request, "terminado") == 0)
         {
             printf("Viaje terminado\n");
+            strcpy(datos_para_el_cliente, "ya casi queda");
+            send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
         else
         {
-            printf("Petición inválida");
+            printf("Petición inválida\n");
+            strcpy(datos_para_el_cliente, "Petición inválida");
+            send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
 
         printf("\nLa petición recibida fue: %s.\n", request);
@@ -95,7 +109,15 @@ int main()
         printf("\nYa envié el mensaje al cliente.\n\n");
 
         printf("\nEsperando una conexión de un cliente en el puerto %d...\n", PORT);
+
+        memset(request, 0, sizeof(request));
     }
 
     return 0;
+}
+
+void mandarAuto(bool autos[]){
+    for(int i = 0; i < NUM_AUTOS; i++){
+        autos[i];
+    }
 }
