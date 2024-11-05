@@ -11,7 +11,7 @@
 #define ETHSIZE 400
 #define PORT 5050
 #define BUF_SIZE 5
-#define NUM_AUTOS 10
+#define NUM_AUTOS 5
 
 int main()
 {
@@ -58,6 +58,10 @@ int main()
     printf("\nEsperando una conexión de un cliente en el puerto %d...\n", PORT);
     socklen_t addrLen; // Define tamaño del socket
 
+    int ganancia = 0;
+    int viajes = 0;
+    int costo = 0;
+
     int final = 0;
     while (final > -1)
     {
@@ -75,19 +79,27 @@ int main()
 
         if (strcmp(request, "estado") == 0)
         {
-            printf("funcionó\n");
-            strcpy(datos_para_el_cliente, "funcionó");
+            sprintf(datos_para_el_cliente, "Ganancia: %d, Viajes: %d", ganancia, viajes);
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
         else if (strcmp(request, "viaje") == 0)
         {
-            printf("Viaje\n");
-            for(int i = 0; i < NUM_AUTOS; i++){
-                if(autos[i] == true) {
-                    printf("Está disponible\n");
-                    sprintf(datos_para_el_cliente, "Placas: %d, Costo: %d", i, 2);
+            for (int i = 0; i < NUM_AUTOS; i++)
+            {
+                if (autos[i])
+                {   
+                    costo = rand() % 1000;
+                    sprintf(datos_para_el_cliente, "Placas: %d, Costo: %d", i, costo);
                     send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
-                    autos[i] == false;
+                    autos[i] = false;
+                    ganancia += costo; 
+                    viajes ++;
+                    break;
+                }
+                else if (i == NUM_AUTOS - 1)
+                {
+                    sprintf(datos_para_el_cliente, "No hay conductores");
+                    send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
                 }
             }
         }
@@ -114,10 +126,4 @@ int main()
     }
 
     return 0;
-}
-
-void mandarAuto(bool autos[]){
-    for(int i = 0; i < NUM_AUTOS; i++){
-        autos[i];
-    }
 }
