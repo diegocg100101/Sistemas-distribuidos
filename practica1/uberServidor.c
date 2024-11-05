@@ -18,6 +18,8 @@ int main()
     char request[ETHSIZE];
     char datos_para_el_cliente[ETHSIZE];
     bool autos[NUM_AUTOS];
+    long int placas;
+    char mensaje[100];
 
     memset(autos, true, sizeof(autos));
 
@@ -77,12 +79,13 @@ int main()
         // Se lee la cadena de texto  obtenida en la petición
         int size_recv = read(newSocket_fd, request, ETHSIZE);
 
-        if (strcmp(request, "estado") == 0)
+        sscanf(request, "%[^;];%ld", mensaje, &placas);
+        if (strcmp(mensaje, "estado") == 0)
         {
             sprintf(datos_para_el_cliente, "Ganancia: %d, Viajes: %d", ganancia, viajes);
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
-        else if (strcmp(request, "viaje") == 0)
+        else if (strcmp(mensaje, "viaje") == 0)
         {
             for (int i = 0; i < NUM_AUTOS; i++)
             {
@@ -103,9 +106,10 @@ int main()
                 }
             }
         }
-        else if (strcmp(request, "terminado") == 0)
+        else if (strcmp(mensaje, "terminado") == 0)
         {
             printf("Viaje terminado\n");
+            printf("%ld", placas);
             strcpy(datos_para_el_cliente, "ya casi queda");
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
@@ -116,7 +120,7 @@ int main()
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
 
-        printf("\nLa petición recibida fue: %s.\n", request);
+        printf("\n\nLa petición recibida fue: %s.\n", request);
 
         printf("\nYa envié el mensaje al cliente.\n\n");
 

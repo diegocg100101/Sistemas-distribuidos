@@ -16,9 +16,15 @@
 int main(int argc, char *argv[])
 {
    char request[20];
+   long int placas;
 
    printf("Escribe la petición: \n");
    scanf("%s", request);
+
+   if(strcmp(request, "terminado") == 0){
+      printf("Escribe las placas del auto:\n");
+      scanf("%ld", &placas);
+   }
 
    char buffer[BUF_SIZE];
 
@@ -59,7 +65,13 @@ int main(int argc, char *argv[])
    /*
     * Para enviar datos usar send()
     */
-   send(fd, request, strlen(request) + 1, 0);
+   if(strcmp(request, "terminado") == 0){
+      sprintf(request, "terminado;%ld", placas);
+      send(fd, request, strlen(request) + 1, 0);
+   } else {
+      send(fd, request, strlen(request) + 1, 0);
+   }
+   
 
    printf("\nLa petición fue enviada al servidor.\n\n");
 
