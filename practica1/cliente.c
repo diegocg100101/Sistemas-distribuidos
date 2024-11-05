@@ -16,21 +16,31 @@
 int main(int argc, char *argv[])
 {
     // Datos para mandar al servidor
-    char nombre[50] = "Diego";
-    long int clave = 1233343;
-    char grupo[20] = "HIJKLM";
+    char nombre[50];
+    long int clave;
+    char grupo[20];
 
     // Variable que almacena el mensaje codificado
-    char mensaje[200]; 
+    char mensaje[200];
+
+    printf("Escribe el nombre: \n");
+    scanf("%[^\n]", nombre);
+
+    printf("Escribe la clave de UEA: \n");
+    scanf("%ld", &clave);
+
+    printf("Escribe el grupo: \n");
+    scanf("%s", grupo);
+
 
     // Se codifica el mensaje
     sprintf(mensaje, "%s;%ld;%s", nombre, clave, grupo);
-    
+
     char buffer[BUF_SIZE];
 
     if (argc != 3)
     {
-        puts("\nModo de uso: ./clienteClima <direccion IP> <# puerto>");
+        puts("\nModo de uso: ./cliente <direccion IP> <# puerto>");
         exit(-1);
     }
 
@@ -63,7 +73,7 @@ int main(int argc, char *argv[])
     read(fd, buffer, BUF_SIZE);
 
     printf("\nEstos son los datos enviados por el servidor:\n");
-    printf("'%s'.\n\n", buffer);
+    printf("%s.\n\n", buffer);
 
     return 0;
 }

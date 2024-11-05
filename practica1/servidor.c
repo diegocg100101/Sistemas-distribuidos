@@ -63,10 +63,10 @@ int main()
     printf("\nEsperando una conexión de un cliente en el puerto %d...\n", PORT);
     socklen_t addrLen; // Define tamaño del socket
 
+    int cupo = 50;
     int final = 0;
     while (final > -1)
     {
-
         // Acepta la conexión y almacena el identificador del socket de la petición
         int newSocket_fd = accept(socket_fd, (struct sockaddr *)&addr_serv, &addrLen);
         if (newSocket_fd < 0)
@@ -86,7 +86,6 @@ int main()
         strcpy(inscripciones[posicion], mensaje);
 
         // Depura para mostrar las inscripciones hechas
-
         printf("Inscripciones realizadas:\n");
         for(int i = 0; i < NUM_INSCRIPCIONES; i++) {
             if(inscripciones[i][0] != '\0'){
@@ -94,7 +93,8 @@ int main()
             }
         }
 
-        sprintf(datos_para_el_cliente, "El número de inscripción es: %d", posicion + 1);
+        cupo --;
+        sprintf(datos_para_el_cliente, "\nEl número de inscripción es: %d\nEl cupo del grupo es: %d", posicion + 1, cupo);
 
         /* Aqui enviamos los datos al cliente */
         // Se especifica el socket, los datos a enviar y el tamaño de bytes
