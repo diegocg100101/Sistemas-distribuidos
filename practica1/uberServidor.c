@@ -9,9 +9,9 @@
 #include <stdbool.h>
 
 #define ETHSIZE 400
-#define PORT 5050
+#define PORT 8000
 #define BUF_SIZE 5
-#define NUM_AUTOS 5
+#define NUM_AUTOS 1
 
 int main()
 {
@@ -67,9 +67,11 @@ int main()
     int final = 0;
     while (final > -1)
     {
+        struct sockaddr_in clienteIP;
+        char *IPcliente = inet_ntoa(clienteIP.sin_addr);
 
         // Acepta la conexión y almacena el identificador del socket de la petición
-        int newSocket_fd = accept(socket_fd, (struct sockaddr *)&addr_serv, &addrLen);
+        int newSocket_fd = accept(socket_fd, (struct sockaddr *)&clienteIP, &addrLen);
         if (newSocket_fd < 0)
         {
             perror("\nError al aceptar la conexión del cliente.\n");
@@ -92,7 +94,7 @@ int main()
                 if (autos[i])
                 {   
                     costo = rand() % 1000;
-                    sprintf(datos_para_el_cliente, "Placas: %d, Costo: %d", i, costo);
+                    sprintf(datos_para_el_cliente, "%d;%d", i, costo);
                     send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
                     autos[i] = false;
                     ganancia += costo; 
@@ -108,10 +110,12 @@ int main()
         }
         else if (strcmp(mensaje, "terminado") == 0)
         {
-            printf("Viaje terminado\n");
-            printf("%ld", placas);
-            strcpy(datos_para_el_cliente, "ya casi queda");
+            autos[placas] = true;
+            printf("\n%ld\n", placas);
+            printf("\nViaje terminado\n");
+            sprintf(datos_para_el_cliente, "Viaje terminado");
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
+
         }
         else
         {
@@ -120,9 +124,9 @@ int main()
             send(newSocket_fd, datos_para_el_cliente, strlen(datos_para_el_cliente) + 1, 0);
         }
 
-        printf("\n\nLa petición recibida fue: %s.\n", request);
+        printf("\n\nLa petición recibida fue: %s.\n", mensaje);
 
-        printf("\nYa envié el mensaje al cliente.\n\n");
+        printf("\nYa envié el mensaje al cliente: %s.\n\n", IPcliente);
 
         printf("\nEsperando una conexión de un cliente en el puerto %d...\n", PORT);
 
